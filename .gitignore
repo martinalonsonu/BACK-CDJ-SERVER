@@ -1,0 +1,13 @@
+#Compiled output
+dist/
+*.js
+*.tsbuildinfo
+tsconfig.json
+
+#Environment variables
+.env
+
+#IDE
+.vscode/
+
+node_modules/
