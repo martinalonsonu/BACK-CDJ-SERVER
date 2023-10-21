@@ -16,8 +16,7 @@ export const DBconnection = async () => {
 }
 
 export default sequelize;
+import '../models/index.model';
 
 
-import '../models/user.model'
-import '../models/typeUser.model'
 

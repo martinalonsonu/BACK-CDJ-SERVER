@@ -17,6 +17,11 @@ User.init(
             autoIncrement: true,
             primaryKey: true,
         },
+        type_document: {
+            type: DataTypes.STRING(10),
+            allowNull: false,
+            unique: true,
+        },
         document: {
             type: DataTypes.STRING(15),
             allowNull: false,
