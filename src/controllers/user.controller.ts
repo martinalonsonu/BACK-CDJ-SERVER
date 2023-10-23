@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/user.model";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
-import { loginRequest, userCreateRequest } from "../Request/user.request";
+import { loginRequest, userCreateRequest } from "../request/user.request";
 import { validationResult } from "express-validator";
 import TypeUser from "../models/typeUser.model";
 
