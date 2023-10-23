@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import User from "../models/user.model";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
@@ -7,11 +7,6 @@ import { validationResult } from "express-validator";
 import TypeUser from "../models/typeUser.model";
 
 export const loginUser = async (req: loginRequest, res: Response) => {
-    //Validación de request
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
     const { email, password } = req.body;
     try {
         //Validación de existencia de usuario
@@ -43,11 +38,6 @@ export const loginUser = async (req: loginRequest, res: Response) => {
 }
 
 export const createUser = async (req: userCreateRequest, res: Response) => {
-    //Validación de request
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
     const data = req.body
     try {
         //Validación de existencia de usuario
