@@ -1,5 +1,5 @@
 interface UserInterface {
-    id: number;
+    id?: number;
     type_document: string;
     document: string;
     email: string;

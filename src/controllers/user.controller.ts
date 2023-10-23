@@ -2,9 +2,17 @@ import { Request, Response } from "express";
 import User from "../models/user.model";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
+import { loginRequest, userCreateRequest } from "../Request/user.request";
+import { validationResult } from "express-validator";
+import TypeUser from "../models/typeUser.model";
 
-export const loginUser = async (req: Request, res: Response) => {
-    const { email, password }: UserInterface = req.body;
+export const loginUser = async (req: loginRequest, res: Response) => {
+    //Validación de request
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const { email, password } = req.body;
     try {
         //Validación de existencia de usuario
         const userExists: User | null = await User.findOne({ where: { email: email } })
@@ -33,3 +41,48 @@ export const loginUser = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+export const createUser = async (req: userCreateRequest, res: Response) => {
+    //Validación de request
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const data = req.body
+    try {
+        //Validación de existencia de usuario
+        const userExists: User | null = await User.findOne({ where: { email: data.email, document: data.document } })
+        if (userExists) {
+            return res.status(400).json({
+                message: "User already exists"
+            });
+        };
+
+        //Encriptación de contraseña
+        const encryptPassword = bcrypt.hashSync(data.password, 10)
+        const newData = { ...data, password: encryptPassword }
+
+        //Creación de usuario
+        const createUser = await User.create(newData)
+        await createUser.save()
+
+        //Respuesta
+        const typeUser = await TypeUser.findByPk(createUser.typeUser_id) //filtramos el tipo de usuario
+        const response: createUserResponse = {
+            id: createUser.id,
+            email: createUser.email,
+            document: createUser.document,
+            typeUser_id: createUser.typeUser_id,
+            typeUser: typeUser?.name || '',
+        }
+        return res.status(200).json({
+            message: "User created successfully",
+            data: response
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};

@@ -13,14 +13,13 @@ class User extends Model<UserInterface> {
 User.init(
     {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,
             primaryKey: true,
         },
         type_document: {
             type: DataTypes.STRING(10),
             allowNull: false,
-            unique: true,
         },
         document: {
             type: DataTypes.STRING(15),
