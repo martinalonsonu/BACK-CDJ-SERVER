@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../db/connection";
+import TypeUser from "./typeUser.model";
 
 class User extends Model<UserInterface> {
     public id!: number;
@@ -49,7 +50,9 @@ User.init(
         sequelize,
         modelName: 'user',
         tableName: 'tbl_user',
+        paranoid: true,
     }
 );
 
 export default User
+

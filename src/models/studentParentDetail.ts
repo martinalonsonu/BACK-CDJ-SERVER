@@ -41,6 +41,7 @@ StudentParentDetail.init(
         sequelize,
         modelName: 'studentParentDetail',
         tableName: 'tbl_student_parent_detail',
+        paranoid: true,
     }
 );
 

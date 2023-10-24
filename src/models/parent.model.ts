@@ -96,6 +96,7 @@ Parent.init(
         sequelize,
         modelName: 'parent',
         tableName: 'tbl_parent',
+        paranoid: true,
     }
 );
 

@@ -116,6 +116,7 @@ Student.init(
         sequelize,
         modelName: 'student',
         tableName: 'tbl_student',
+        paranoid: true,
     }
 )
 

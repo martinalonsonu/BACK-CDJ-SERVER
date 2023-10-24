@@ -7,6 +7,20 @@ export interface loginRequest extends Request {
     }
 }
 
+export interface updatePasswordRequest extends Request {
+    body: {
+        email: string;
+        password: string;
+        newPassword: string;
+    }
+}
+
+export interface userGetRequest extends Request {
+    body: {
+        search?: string;
+    }
+}
+
 export interface userCreateRequest extends Request {
     body: {
         email: string;
@@ -29,5 +43,11 @@ export interface userEditRequest extends Request {
         document: string;
         status: number;
         typeUser_id: number;
+    }
+}
+
+export interface deleteUserRequest extends Request {
+    params: {
+        id: string;
     }
 }

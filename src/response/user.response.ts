@@ -13,3 +13,11 @@ interface updateUserResponse {
     typeUser_id: number;
     typeUser: string;
 }
+
+interface getUsersResponse {
+    id: number;
+    document: string;
+    email: string;
+    typeUser_id: number;
+    typeUser_name: string;
+}

@@ -27,9 +27,5 @@ TypeUser.init(
     }
 );
 
-export default TypeUser;
 
-TypeUser.hasMany(User, {
-    foreignKey: 'typeUser_id',
-    as: 'users'
-})
+export default TypeUser;
