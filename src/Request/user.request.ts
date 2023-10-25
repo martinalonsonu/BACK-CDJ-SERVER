@@ -32,6 +32,15 @@ export interface userCreateRequest extends Request {
     }
 }
 
+export interface userData {
+    email: string;
+    password: string;
+    type_document: string;
+    document: string;
+    status: number;
+    typeUser_id: number;
+}
+
 export interface userEditRequest extends Request {
     params: {
         id: string;

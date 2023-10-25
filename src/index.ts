@@ -4,7 +4,6 @@ import morgan from 'morgan';
 import cors from 'cors';
 import dotenv from 'dotenv'
 import router from './routes/index.routes';
-import validateToken from './helpers/validate-token';
 
 dotenv.config();
 
