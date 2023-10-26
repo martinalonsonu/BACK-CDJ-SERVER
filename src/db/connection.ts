@@ -9,13 +9,21 @@ const sequelize = new Sequelize('cdj-back', 'root', '', {
 });
 
 const seedDirectory = path.join(__dirname, 'seeders');
+const modelDirectory = path.join(__dirname, '../models');
 
 export const DBconnection = async () => {
     try {
-        await sequelize.sync({ force: true });
-        fs.readdirSync(seedDirectory).forEach((file) => {
+        await sequelize.sync({ alter: true });
+        // { force: true }
+        // fs.readdirSync(seedDirectory).forEach((file) => {
+        //     if (file.endsWith('.js')) {
+        //         const seedFilePath = path.join(seedDirectory, file);
+        //         require(seedFilePath);
+        //     }
+        // });
+        fs.readdirSync(modelDirectory).forEach((file) => {
             if (file.endsWith('.js')) {
-                const seedFilePath = path.join(seedDirectory, file);
+                const seedFilePath = path.join(modelDirectory, file);
                 require(seedFilePath);
             }
         });

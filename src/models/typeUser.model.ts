@@ -24,8 +24,8 @@ TypeUser.init(
         sequelize,
         modelName: 'typeUser',
         tableName: 'tbl_type_user',
+        timestamps: false
     }
 );
-
 
 export default TypeUser;
