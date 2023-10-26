@@ -14,13 +14,6 @@ const modelDirectory = path.join(__dirname, '../models');
 export const DBconnection = async () => {
     try {
         await sequelize.sync({ alter: true });
-        // { force: true }
-        // fs.readdirSync(seedDirectory).forEach((file) => {
-        //     if (file.endsWith('.js')) {
-        //         const seedFilePath = path.join(seedDirectory, file);
-        //         require(seedFilePath);
-        //     }
-        // });
         fs.readdirSync(modelDirectory).forEach((file) => {
             if (file.endsWith('.js')) {
                 const seedFilePath = path.join(modelDirectory, file);
