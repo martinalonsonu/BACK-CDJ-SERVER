@@ -6,7 +6,7 @@ import TypeUser from "../models/typeUser.model";
 import { Op } from "sequelize";
 import { HandleError } from "../helpers/handlerController";
 
-export const userService = {
+const userService = {
 
     login: async (email: string, password: string) => {
         if (!email || !password) throw new HandleError(400, "Parameters not provided");
@@ -130,8 +130,13 @@ export const userService = {
     },
 
     deleteOneUser: async (id: string) => {
+        const userExists: User | null = await User.findByPk(id)
+        if (!userExists) throw new HandleError(404, "Parent does not exist")
+
         await User.destroy({ where: { id: id } })
         return true;
     }
-}
+};
+
+export default userService
 

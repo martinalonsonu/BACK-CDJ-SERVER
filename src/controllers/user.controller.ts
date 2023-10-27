@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { loginRequest, userGetRequest, userCreateRequest, userEditRequest, updatePasswordRequest, deleteUserRequest, userData } from "../request/user.request";
-import { userService } from "../services/userService";
+import userService from "../services/userService";
 import { handleServiceError, handleSuccessful } from "../helpers/handlerController";
 
 export const loginUser = async (req: loginRequest, res: Response) => {

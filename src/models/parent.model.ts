@@ -29,7 +29,6 @@ Parent.init(
         type_document: {
             type: DataTypes.STRING(10),
             allowNull: false,
-            unique: true,
         },
         document: {
             type: DataTypes.STRING(15),

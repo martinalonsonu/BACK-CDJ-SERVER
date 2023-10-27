@@ -1,5 +1,5 @@
 interface ParentInterface {
-    id: number;
+    id?: number;
     type_document: string;
     document: string;
     name: string;
