@@ -46,13 +46,3 @@ StudentParentDetail.init(
 );
 
 export default StudentParentDetail;
-
-StudentParentDetail.belongsTo(Student, {
-    foreignKey: 'idStudent',
-    as: 'students'
-})
-
-StudentParentDetail.belongsTo(Parent, {
-    foreignKey: 'idParent',
-    as: 'parents'
-})

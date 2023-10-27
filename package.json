@@ -5,7 +5,10 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "tsc-watch --onSuccess \"nodemon dist/index.js"
+        "start": "tsc-watch --onSuccess \"nodemon dist/index.js",
+        "migrate": "cd src && sequelize db:migrate",
+        "seed": "cd src && sequelize db:seed:all",
+        "migrate:seed": "cd src && sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
     },
     "keywords": [],
     "author": "",
