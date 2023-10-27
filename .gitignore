@@ -1,6 +1,5 @@
 #Compiled output
 dist/
-*.js
 *.tsbuildinfo
 tsconfig.json
 
