@@ -1,7 +1,7 @@
 import User from "../models/user.model";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
-import { userData } from "../request/user.request";
+import { userData } from "../types/request/user.request";
 import TypeUser from "../models/typeUser.model";
 import { Op } from "sequelize";
 import { HandleError } from "../helpers/handlerController";

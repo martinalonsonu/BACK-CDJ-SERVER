@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { handleServiceError, handleSuccessful } from "../helpers/handlerController";
 import parentService from "../services/parentService";
-import { parentCreateRequest, parentDeleteRequest, parentGetOneRequest, parentGetRequest, parentUpdateRequest } from "../request/parent.request";
+import { parentCreateRequest, parentDeleteRequest, parentGetOneRequest, parentGetRequest, parentUpdateRequest } from "../types/request/parent.request";
 
 export const getParents = async (req: parentGetRequest, res: Response) => {
     const { search } = req.body

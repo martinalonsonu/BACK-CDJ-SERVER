@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { loginRequest, userGetRequest, userCreateRequest, userEditRequest, updatePasswordRequest, deleteUserRequest, userData } from "../request/user.request";
+import { loginRequest, userGetRequest, userCreateRequest, userEditRequest, updatePasswordRequest, deleteUserRequest, userData } from "../types/request/user.request";
 import userService from "../services/userService";
 import { handleServiceError, handleSuccessful } from "../helpers/handlerController";
 

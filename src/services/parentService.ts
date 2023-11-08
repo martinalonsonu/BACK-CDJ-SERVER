@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import { HandleError } from "../helpers/handlerController";
 import Parent from "../models/parent.model";
-import { parentData } from "../request/parent.request";
+import { parentData } from "../types/request/parent.request";
 
 const parentService = {
     getParents: async (search?: string) => {
