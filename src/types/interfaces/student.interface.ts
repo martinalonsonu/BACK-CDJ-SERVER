@@ -1,5 +1,5 @@
 interface StudentInterface {
-    id: number;
+    id?: number;
     type_document: string;
     document: string;
     student_code: string;

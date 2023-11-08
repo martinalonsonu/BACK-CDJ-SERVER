@@ -56,7 +56,7 @@ const parentService = {
         const parentExists: Parent | null = await Parent.findOne({ where: { document: data.document } })
         if (parentExists) throw new HandleError(400, "User already exists")
 
-        //Creación de usuario
+        //Creación de pariente
         const createParent = await Parent.create(data)
         if (!createParent) throw new HandleError(500, "Problem creating parent")
         await createParent.save()
