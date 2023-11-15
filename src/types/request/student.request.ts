@@ -5,7 +5,7 @@ export interface createStudentRequest extends Request {
         email: string;
         type_document: string;
         document: string;
-        student_code: string;
+        student_code?: string;
         name: string;
         patern_surname: string;
         matern_surname: string;
@@ -27,7 +27,7 @@ export interface studentData {
     email: string;
     type_document: string;
     document: string;
-    student_code: string;
+    student_code?: string;
     name: string;
     patern_surname: string;
     matern_surname: string;

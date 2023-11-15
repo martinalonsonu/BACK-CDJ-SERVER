@@ -2,7 +2,7 @@ interface createUserResponse {
     id: number;
     email: string;
     document: string;
-    typeUser_id: number;
+    idTypeUser: number;
     typeUser: string;
 }
 

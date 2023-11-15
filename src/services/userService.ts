@@ -5,6 +5,7 @@ import { userData } from "../types/request/user.request";
 import TypeUser from "../models/typeUser.model";
 import { Op } from "sequelize";
 import { HandleError } from "../helpers/handlerController";
+import { getRoleByUser } from "../helpers/getRoleByUser";
 
 const userService = {
 
@@ -67,12 +68,18 @@ const userService = {
         }
 
         //búsqueda de registros
-        const users = await User.findAll({
+        const users = (await User.findAll({
             attributes: ['id', 'document', 'email', 'typeUser_id'],
             include: [{ model: TypeUser, as: 'typeUser', attributes: ['name'] }],
             where: whereCondition,
             paranoid: true
-        })
+        })).map((user: any) => ({
+            id: user.id,
+            document: user.document,
+            email: user.email,
+            idTypeUser: user.typeUser_id,
+            typeUser: user.typeUser.name
+        }))
         if (users.length === 0) throw new HandleError(404, "No existing users")
         return users;
     },
@@ -92,13 +99,14 @@ const userService = {
         await createUser.save()
 
         //Respuesta
-        const typeUser = await TypeUser.findByPk(createUser.typeUser_id) //filtramos el tipo de usuario
+        const role = getRoleByUser(createUser.typeUser_id)
+
         const response: createUserResponse = {
             id: createUser.id,
             email: createUser.email,
             document: createUser.document,
-            typeUser_id: createUser.typeUser_id,
-            typeUser: typeUser?.name || '',
+            idTypeUser: createUser.typeUser_id,
+            typeUser: role
         }
 
         return response;
