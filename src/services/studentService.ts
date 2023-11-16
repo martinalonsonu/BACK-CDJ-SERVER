@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { HandleError } from "../helpers/handlerController";
 import Student from "../models/student.model";
 import User from "../models/user.model";
@@ -41,6 +42,55 @@ const studentService = {
         }
 
         return response;
+    },
+
+    getStudents: async (search?: string) => {
+        //condición de búsqueda
+        let whereCondition = {};
+        if (search) {
+            whereCondition = {
+                [Op.or]: [
+                    {
+                        name: {
+                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el email
+                        },
+                    },
+                    {
+                        patern_surname: {
+                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el email
+                        },
+                    },
+                    {
+                        matern_surname: {
+                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el email
+                        },
+                    },
+                    {
+                        document: {
+                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el documento
+                        },
+                    },
+                ],
+            };
+        };
+
+        //búsqueda de registros
+        const students = await Promise.all((await Student.findAll({
+            paranoid: true,
+            where: whereCondition,
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'deletedAt']
+            }
+        })).map(async (student) => {
+            const dataUser = await userService.getOneUser(undefined, student.document);
+            return {
+                dataUser,
+                ...student.toJSON() // Agregamos toJSON() para obtener un objeto plano de Sequelize
+            };
+        }));
+
+        if (students.length === 0) throw new HandleError(404, "No existing students")
+        return students
     }
 }
 

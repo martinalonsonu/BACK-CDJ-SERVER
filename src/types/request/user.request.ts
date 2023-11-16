@@ -21,6 +21,13 @@ export interface userGetRequest extends Request {
     }
 }
 
+export interface userGetOneRequest extends Request {
+    params: {
+        id: string;
+    }
+}
+
+
 export interface userCreateRequest extends Request {
     body: {
         email: string;

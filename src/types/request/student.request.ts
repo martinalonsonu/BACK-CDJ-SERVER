@@ -1,5 +1,11 @@
 import { Request } from "express";
 
+export interface studentGetRequest extends Request {
+    body: {
+        search?: string;
+    }
+}
+
 export interface createStudentRequest extends Request {
     body: {
         email: string;

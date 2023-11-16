@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { loginRequest, userGetRequest, userCreateRequest, userEditRequest, updatePasswordRequest, deleteUserRequest, userData } from "../types/request/user.request";
+import { loginRequest, userGetRequest, userCreateRequest, userEditRequest, updatePasswordRequest, deleteUserRequest, userData, userGetOneRequest } from "../types/request/user.request";
 import userService from "../services/userService";
 import { handleServiceError, handleSuccessful } from "../helpers/handlerController";
 
@@ -28,6 +28,16 @@ export const getUsers = async (req: userGetRequest, res: Response) => {
     try {
         const users = await userService.getAllUsers(search)
         handleSuccessful(200, res, "All users getting successfully", users)
+    } catch (error) {
+        handleServiceError(error, res)
+    }
+}
+
+export const getOneUser = async (req: userGetOneRequest, res: Response) => {
+    const { id } = req.params;
+    try {
+        const user = await userService.getOneUser(id)
+        handleSuccessful(200, res, "User getting successfully", user)
     } catch (error) {
         handleServiceError(error, res)
     }

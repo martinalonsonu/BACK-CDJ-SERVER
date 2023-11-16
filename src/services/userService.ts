@@ -84,6 +84,32 @@ const userService = {
         return users;
     },
 
+    getOneUser: async (id?: string, document?: string) => {
+        const searchId = await User.findByPk(id, {
+            attributes: ['id', 'document', 'email', 'typeUser_id'],
+            include: [{ model: TypeUser, as: 'typeUser', attributes: ['name'] }],
+            paranoid: true
+        })
+
+        const searchDocument = await User.findOne({
+            where: { document: document },
+            attributes: ['id', 'document', 'email', 'typeUser_id'],
+            include: [{ model: TypeUser, as: 'typeUser', attributes: ['name'] }],
+            paranoid: true
+        })
+        const userExists: any = id ? searchId : searchDocument
+        if (!userExists) throw new HandleError(400, "User not found.")
+
+        const response = {
+            idUser: userExists.id,
+            document: userExists.document,
+            email: userExists.email,
+            idTypeUser: userExists.typeUser_id,
+            typeUser: userExists.typeUser.name
+        }
+        return response;
+    },
+
     createOneUser: async (data: userData) => {
         //Validación de existencia de usuario
         const userExists: User | null = await User.findOne({ where: { email: data.email, document: data.document } })

@@ -36,7 +36,8 @@ const parentService = {
 
         //búsqueda de registros
         const parents = await Parent.findAll({
-            paranoid: true
+            paranoid: true,
+            where: whereCondition
         })
         if (parents.length === 0) throw new HandleError(404, "No existing users")
         return parents;
