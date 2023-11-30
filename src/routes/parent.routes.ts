@@ -1,14 +1,14 @@
-import { Response, Router, Request } from "express";
-import { getParents, getOneParent, createParent, updateParent, deleteParent } from "../controllers/parent.controller";
-import Parent from "../models/parent.model";
+import { Router } from "express";
+import ParentController from "../controllers/parent.controller";
 
+const { getParents, getOneParent, createParent, updateParent, deleteParent } = new ParentController()
 const parentRouter = Router();
 
-parentRouter.get('/', getParents)
-parentRouter.get('/:id', getOneParent)
-parentRouter.post('/register', createParent)
-parentRouter.put('/update/:id', updateParent)
-parentRouter.delete('/delete/:id', deleteParent)
+parentRouter.get('/', getParents);
+parentRouter.get('/:id', getOneParent);
+parentRouter.post('/register', createParent);
+parentRouter.put('/update/:id', updateParent);
+parentRouter.delete('/delete/:id', deleteParent);
 
 
 export default parentRouter;

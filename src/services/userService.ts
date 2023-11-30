@@ -7,9 +7,8 @@ import { Op } from "sequelize";
 import { HandleError } from "../helpers/handlerController";
 import { getRoleByUser } from "../helpers/getRoleByUser";
 
-const userService = {
-
-    login: async (email: string, password: string) => {
+class UserService {
+    login = async (email: string, password: string): Promise<string> => {
         if (!email || !password) throw new HandleError(400, "Parameters not provided");
         //Validación de existencia de usuario
         const userExists: User | null = await User.findOne({ where: { email: email } })
@@ -25,9 +24,9 @@ const userService = {
         }, process.env.SECRET_KEY || 'cdj123', { expiresIn: "2h" })
 
         return token;
-    },
+    };
 
-    changePassword: async (email: string, password: string, newPassword: string) => {
+    changePassword = async (email: string, password: string, newPassword: string): Promise<boolean> => {
         if (!email || !password || !newPassword) throw new HandleError(400, "Parameters not provided");
         //Validación de existencia de usuario
         const userExists: User | null = await User.findOne({ where: { email: email } })
@@ -45,9 +44,9 @@ const userService = {
         await updateUser.save();
 
         return true;
-    },
+    };
 
-    getAllUsers: async (search?: string) => {
+    getAllUsers = async (search?: string): Promise<any[]> => {
         //condición de búsqueda
         let whereCondition = {};
         if (search) {
@@ -82,9 +81,27 @@ const userService = {
         }))
         if (users.length === 0) throw new HandleError(404, "No existing users")
         return users;
-    },
+    };
 
-    getOneUser: async (id?: string, document?: string) => {
+    getUserById = async (id: string): Promise<any> => {
+        const userExists: any = await User.findByPk(id, {
+            attributes: ['id', 'document', 'email', 'typeUser_id'],
+            include: [{ model: TypeUser, as: 'typeUser', attributes: ['name'] }],
+            paranoid: true
+        })
+        if (!userExists) throw new HandleError(400, "User not found.")
+
+        const response = {
+            idUser: userExists.id,
+            document: userExists.document,
+            email: userExists.email,
+            idTypeUser: userExists.typeUser_id,
+            typeUser: userExists.typeUser.name
+        }
+        return response;
+    }
+
+    getOneUser = async (id?: string, document?: string): Promise<any> => {
         const searchId = await User.findByPk(id, {
             attributes: ['id', 'document', 'email', 'typeUser_id'],
             include: [{ model: TypeUser, as: 'typeUser', attributes: ['name'] }],
@@ -108,9 +125,9 @@ const userService = {
             typeUser: userExists.typeUser.name
         }
         return response;
-    },
+    };
 
-    createOneUser: async (data: userData) => {
+    createOneUser = async (data: userData): Promise<createUserResponse> => {
         //Validación de existencia de usuario
         const userExists: User | null = await User.findOne({ where: { email: data.email, document: data.document } })
         if (userExists) throw new HandleError(400, "User already exists")
@@ -136,9 +153,9 @@ const userService = {
         }
 
         return response;
-    },
+    };
 
-    updateOneUser: async (id: string, document: string, email: string, password: string, status: number, typeUser_id: number, type_document: string) => {
+    updateOneUser = async (id: string, document: string, email: string, password: string, status: number, typeUser_id: number, type_document: string): Promise<updateUserResponse> => {
         const userExists: User | null = await User.findByPk(id)
         if (!userExists) throw new HandleError(404, "User does not exist")
 
@@ -161,16 +178,17 @@ const userService = {
         }
 
         return response;
-    },
+    };
 
-    deleteOneUser: async (id: string) => {
+    deleteOneUser = async (id: string): Promise<boolean> => {
         const userExists: User | null = await User.findByPk(id)
         if (!userExists) throw new HandleError(404, "Parent does not exist")
 
         await User.destroy({ where: { id: id } })
         return true;
-    }
-};
+    };
+}
 
-export default userService
+
+export default UserService
 

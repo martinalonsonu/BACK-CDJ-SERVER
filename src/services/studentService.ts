@@ -5,10 +5,12 @@ import User from "../models/user.model";
 import { TypeUserEnum } from "../types/UserType/userType";
 import { studentData } from "../types/request/student.request";
 import { userData } from "../types/request/user.request";
-import userService from "./userService";
+import UserService from "./userService";
 
-const studentService = {
-    createNewStudent: async (data: studentData) => {
+const { createOneUser, getOneUser } = new UserService()
+
+class StudentService {
+    createNewStudent = async (data: studentData) => {
         //Validación de existencia del estudiante
         const studentExists: Student | null = await Student.findOne({ where: { document: data.document } })
         const userExists: User | null = await User.findOne({ where: { document: data.document, email: data.email } })
@@ -29,7 +31,7 @@ const studentService = {
             typeUser_id: TypeUserEnum.STUDENT
         }
 
-        const userStudent: createUserResponse = await userService.createOneUser(dataUser)
+        const userStudent: createUserResponse = await createOneUser(dataUser)
         if (!userStudent) throw new HandleError(500, "Problem creating student")
 
         //respuesta
@@ -42,9 +44,9 @@ const studentService = {
         }
 
         return response;
-    },
+    };
 
-    getStudents: async (search?: string) => {
+    getStudents = async (search?: string) => {
         //condición de búsqueda
         let whereCondition = {};
         if (search) {
@@ -82,7 +84,7 @@ const studentService = {
                 exclude: ['createdAt', 'updatedAt', 'deletedAt']
             }
         })).map(async (student) => {
-            const dataUser = await userService.getOneUser(undefined, student.document);
+            const dataUser = await getOneUser(undefined, student.document);
             return {
                 dataUser,
                 ...student.toJSON() // Agregamos toJSON() para obtener un objeto plano de Sequelize
@@ -91,7 +93,7 @@ const studentService = {
 
         if (students.length === 0) throw new HandleError(404, "No existing students")
         return students
-    }
+    };
 }
 
-export default studentService
+export default StudentService;
