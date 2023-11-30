@@ -7,14 +7,35 @@ import router from './routes/index.routes';
 
 dotenv.config();
 
-const app: Application = express();
-const port = process.env.PORT || 8000;
+class Server {
+    private app: Application;
+    private port: number | string;
 
-app.use(morgan('dev'));
-app.use(cors());
-app.use(json());
-app.use('/api', router);
-app.listen(port, async () => {
-    await DBconnection();
-    console.log(`Listening on port ${port}`);
-});
+    constructor() {
+        this.app = express()
+        this.port = process.env.PORT || 8000;
+
+        this.config();
+        this.routes();
+        this.listen();
+    }
+
+    private config = (): void => {
+        this.app.use(morgan('dev'));
+        this.app.use(cors());
+        this.app.use(json());
+    }
+
+    private routes = (): void => {
+        this.app.use('/api', router);
+    }
+
+    private listen = (): void => {
+        this.app.listen(this.port, async () => {
+            await DBconnection();
+            console.log(`Listening on port ${this.port}`);
+        });
+    }
+}
+
+new Server();
