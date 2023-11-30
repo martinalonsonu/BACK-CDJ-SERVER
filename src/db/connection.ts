@@ -8,7 +8,6 @@ const sequelize = new Sequelize('cdj-back', 'root', '', {
     logging: false,
 });
 
-const seedDirectory = path.join(__dirname, 'seeders');
 const modelDirectory = path.join(__dirname, '../models');
 
 export const DBconnection = async () => {
