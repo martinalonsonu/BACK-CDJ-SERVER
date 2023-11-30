@@ -1,5 +1,5 @@
 interface StudentParentInterface {
-    id: number;
+    id?: number;
     idStudent: number;
     idParent: number;
     relationship: string;

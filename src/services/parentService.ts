@@ -46,7 +46,10 @@ class ParentService {
     getOneParent = async (id: string) => {
         //búsqueda de registro
         const parent = await Parent.findByPk(id, {
-            paranoid: true
+            paranoid: true,
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'deletedAt']
+            }
         })
         if (!parent) throw new HandleError(404, "No existing parent")
         return parent

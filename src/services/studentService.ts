@@ -94,6 +94,25 @@ class StudentService {
         if (students.length === 0) throw new HandleError(404, "No existing students")
         return students
     };
+
+    getStudentById = async (id: string): Promise<any> => {
+        const studentExists: any = await Student.findByPk(id, {
+            paranoid: true,
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'deletedAt']
+            }
+        })
+        if (!studentExists) throw new HandleError(400, "Student not found.")
+
+        const response = {
+            document: studentExists.document,
+            student_code: studentExists.student_code,
+            name: studentExists.name,
+            patern_surname: studentExists.patern_surname,
+            matern_surname: studentExists.matern_surname,
+        }
+        return response;
+    }
 }
 
 export default StudentService;
