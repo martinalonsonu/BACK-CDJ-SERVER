@@ -3,7 +3,7 @@ import { handleServiceError, handleSuccessful } from "../helpers/handlerControll
 import { studentParentCreateRequest, studentParentGetRequest, studentParentUpdateRequest, studentParentDeleteRequest } from "../types/request/studenParent.request";
 import StudentParentService from "../services/studentParentService";
 
-const { getStudentParent, createStudentParent, updateStudentPatent, deleteStudentParent } = new StudentParentService()
+const { getStudentParent, createStudentParent, updateStudentParent, deleteStudentParent } = new StudentParentService()
 
 class StudentParentController {
     getStudentParent = async (req: studentParentGetRequest, res: Response): Promise<void> => {
@@ -30,8 +30,8 @@ class StudentParentController {
         const { id } = req.params
         const data = req.body
         try {
-            const updateStudentParent = await updateStudentPatent(id, data)
-            handleSuccessful(202, res, "Relationship student-parent updated successfully", updateStudentParent)
+            const updateStudentParentResponse = await updateStudentParent(id, data)
+            handleSuccessful(202, res, "Relationship student-parent updated successfully", updateStudentParentResponse)
         } catch (error) {
             handleServiceError(error, res)
         }

@@ -8,6 +8,7 @@ class StudentParentDetail extends Model<StudentParentInterface> {
     public idStudent!: number;
     public idParent!: number;
     public relationship!: string;
+    public tutor!: boolean;
 }
 
 StudentParentDetail.init(
@@ -35,6 +36,10 @@ StudentParentDetail.init(
                 }
             },
             comment: 'P=PAPÁ, M=MAMÁ, O=OTRO'
+        },
+        tutor: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         }
     },
     {

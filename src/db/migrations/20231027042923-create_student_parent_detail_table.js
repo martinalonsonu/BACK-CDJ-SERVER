@@ -27,6 +27,10 @@ module.exports = {
                 },
                 comment: 'P=PAPÁ, M=MAMÁ, O=OTRO'
             },
+            tutor: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false
+            },
             createdAt: {
                 type: DataTypes.DATE,
                 allowNull: false,

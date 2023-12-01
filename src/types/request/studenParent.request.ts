@@ -1,6 +1,6 @@
 import { Request } from "express";
 
-export type relationship = "mom" | "dad" | "tutor"
+export type relationship = "M" | "P" | "O"
 
 //Types de controladores
 
@@ -15,6 +15,7 @@ export interface studentParentCreateRequest extends Request {
         idStudent: number;
         idParent: number;
         relationship: relationship;
+        tutor: boolean;
     }
 }
 
@@ -26,6 +27,7 @@ export interface studentParentUpdateRequest extends Request {
         idStudent: number;
         idParent: number;
         relationship: relationship;
+        tutor: boolean;
     }
 };
 
@@ -42,4 +44,5 @@ export interface studentParentData {
     idStudent: number;
     idParent: number;
     relationship: relationship;
+    tutor: boolean;
 }

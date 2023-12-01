@@ -3,4 +3,5 @@ interface StudentParentInterface {
     idStudent: number;
     idParent: number;
     relationship: string;
+    tutor: boolean;
 }

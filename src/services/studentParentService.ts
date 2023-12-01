@@ -34,11 +34,13 @@ class StudentParentService {
             const getOneStudent = await getStudentById(relation.idStudent.toString())
             const getOneParentBy = await getOneParent(relation.idParent.toString())
             return {
+                id: relation.id,
                 idStudent: relation.idStudent,
                 dataStudent: getOneStudent,
                 idParent: relation.idParent,
                 dataParent: getOneParentBy,
                 relationship: relation.relationship,
+                tutor: relation.tutor,
             }
         }));
         if (studenParent.length === 0) throw new HandleError(404, "No relationships existing")
@@ -52,13 +54,13 @@ class StudentParentService {
 
         //Creación de la relación
         const createStudentParent = await StudentParentDetail.create(data)
-        if (!createStudentParent) throw new HandleError(500, "Problem creating student")
+        if (!createStudentParent) throw new HandleError(500, "Problem creating relationship")
         await createStudentParent.save()
 
         //traer info
         const getOneStudent = await getStudentById(data.idStudent.toString())
         const getOneParentBy = await getOneParent(data.idParent.toString())
-        if (!getOneStudent || !getOneParentBy) throw new HandleError(500, "Problem creating student")
+        if (!getOneStudent || !getOneParentBy) throw new HandleError(500, "Problem creating relationship")
 
         const response = {
             id: createStudentParent.id,
@@ -67,13 +69,47 @@ class StudentParentService {
             idParent: createStudentParent.idParent,
             dataParent: getOneParentBy,
             relationship: createStudentParent.relationship,
+            tutor: createStudentParent.tutor,
         }
         return response;
     };
 
-    updateStudentPatent = async (id: string, data: studentParentData) => { };
+    updateStudentParent = async (id: string, data: studentParentData) => {
+        const studentParentExists: StudentParentDetail | null = await StudentParentDetail.findByPk(id, {
+            paranoid: true,
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'deletedAt']
+            }
+        })
+        if (!studentParentExists) throw new HandleError(404, "Relationship does not exist")
 
-    deleteStudentParent = async (id: string) => { return true };
+        //actualizar el usuario   
+        const updateStudentParent = await studentParentExists.update(data);
+        if (!updateStudentParent) throw new HandleError(500, "Problem updating relationship")
+        await updateStudentParent.save()
+
+        const getOneStudent = await getStudentById(updateStudentParent.idStudent.toString())
+        const getOneParentBy = await getOneParent(updateStudentParent.idParent.toString())
+
+        //respuesta
+        return {
+            id: updateStudentParent.id,
+            idStudent: updateStudentParent.idStudent,
+            idParent: updateStudentParent.idParent,
+            dataStudent: getOneStudent,
+            dataParent: getOneParentBy,
+            relationship: updateStudentParent.relationship,
+            tutor: updateStudentParent.tutor
+        }
+    };
+
+    deleteStudentParent = async (id: string) => {
+        const studentParentExists: StudentParentDetail | null = await StudentParentDetail.findByPk(id)
+        if (!studentParentExists) throw new HandleError(404, "Parent does not exist")
+
+        await StudentParentDetail.destroy({ where: { id: id } })
+        return true;
+    };
 }
 
 export default StudentParentService;
