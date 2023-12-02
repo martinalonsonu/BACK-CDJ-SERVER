@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import dotenv from 'dotenv'
 import router from './routes/index.routes';
+import IndexRouter from './routes/index.routes';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ class Server {
     }
 
     private routes = (): void => {
+        const { router } = new IndexRouter();
         this.app.use('/api', router);
     }
 

@@ -69,7 +69,7 @@ class ParentService {
         return createParent;
     };
 
-    updatePatent = async (id: string, data: parentData) => {
+    updateParent = async (id: string, data: parentData) => {
         const parentExists: Parent | null = await Parent.findByPk(id)
         if (!parentExists) throw new HandleError(404, "Parent does not exist")
 
