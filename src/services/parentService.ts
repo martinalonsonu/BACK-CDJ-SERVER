@@ -37,7 +37,10 @@ class ParentService {
         //búsqueda de registros
         const parents = await Parent.findAll({
             paranoid: true,
-            where: whereCondition
+            where: whereCondition,
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'deletedAt']
+            }
         })
         if (parents.length === 0) throw new HandleError(404, "No existing users")
         return parents;

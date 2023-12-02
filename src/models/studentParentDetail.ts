@@ -1,7 +1,5 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../db/connection";
-import Student from "./student.model";
-import Parent from "./parent.model";
 
 class StudentParentDetail extends Model<StudentParentInterface> {
     public id!: number;
