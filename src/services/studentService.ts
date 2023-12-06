@@ -87,6 +87,18 @@ class StudentService {
         }
         return response;
     }
+
+    updateStudent = async (id: string, data: studentData) => {
+        const studentExists = await Student.findByPk(id)
+        if (!studentExists) throw new HandleError(400, "Student not found.")
+
+        const updateExistStudent = await studentExists.update(data)
+        if (!updateExistStudent) throw new HandleError(500, "Problem updating student")
+        await updateExistStudent.save()
+
+        //respuesta
+        return updateExistStudent;
+    }
 }
 
 export default StudentService;
