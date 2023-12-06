@@ -4,6 +4,7 @@ import TypeUser from "./typeUser.model";
 
 class User extends Model<UserInterface> {
     public id!: number;
+    public type_document!: string;
     public document!: string;
     public email!: string;
     public password!: string;

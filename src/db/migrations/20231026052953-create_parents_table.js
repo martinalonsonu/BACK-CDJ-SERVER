@@ -15,7 +15,6 @@ module.exports = {
             document: {
                 type: DataTypes.STRING(15),
                 allowNull: false,
-                unique: true,
             },
             name: {
                 type: DataTypes.STRING(50),

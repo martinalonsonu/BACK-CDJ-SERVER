@@ -1,50 +1,11 @@
 import User from "../models/user.model";
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken';
 import { userData } from "../types/request/user.request";
 import TypeUser from "../models/typeUser.model";
 import { HandleError } from "../helpers/handlerController";
 import { getRoleByUser } from "../helpers/getRoleByUser";
 
 class UserService {
-    login = async (email: string, password: string): Promise<string> => {
-        if (!email || !password) throw new HandleError(400, "Parameters not provided");
-        //Validación de existencia de usuario
-        const userExists: User | null = await User.findOne({ where: { email: email } })
-        if (!userExists) throw new HandleError(404, "User not found.")
-
-        //Validación de password
-        const passwordValidate: boolean = await bcrypt.compare(password, userExists.password)
-        if (!passwordValidate) throw new HandleError(4001, "Password is incorrect")
-
-        //Generamos token
-        const token = jwt.sign({
-            email: email
-        }, process.env.SECRET_KEY || 'cdj123', { expiresIn: "2h" })
-
-        return token;
-    };
-
-    changePassword = async (email: string, password: string, newPassword: string): Promise<boolean> => {
-        if (!email || !password || !newPassword) throw new HandleError(400, "Parameters not provided");
-        //Validación de existencia de usuario
-        const userExists: User | null = await User.findOne({ where: { email: email } })
-        if (!userExists) throw new HandleError(404, "User does not exist")
-
-        //validación de contraseña
-        const passwordValidate = await bcrypt.compare(password, userExists.password)
-        if (!passwordValidate) throw new HandleError(400, "Password is incorrect")
-
-        //Encriptación de nueva contraseña
-        const encryptPassword = bcrypt.hashSync(newPassword, 10)
-
-        //actualizar el usuario   
-        const updateUser = await userExists.update({ password: encryptPassword });
-        await updateUser.save();
-
-        return true;
-    };
-
     getAllUsers = async (search?: string): Promise<any[]> => {
         //condición de búsqueda: importamos filtros del modelo
         const searchCondition = User.filters(search || '')

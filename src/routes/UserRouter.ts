@@ -12,13 +12,11 @@ class UserRouter {
     }
 
     private routes = (): void => {
-        this.userRouter.post('/login', this.userController.loginUser);
         this.userRouter.get('/', this.userController.getUsers);
         this.userRouter.get('/type', this.userController.getTypeUsers);
         this.userRouter.get('/:id', this.userController.getOneUserById);
         this.userRouter.post('/register', this.userController.createUser);
         this.userRouter.put('/update/:id', this.userController.updateUser);
-        this.userRouter.put('/changePassword', this.userController.changePassword);
         this.userRouter.delete('/delete/:id', this.userController.deleteUser);
     }
 }

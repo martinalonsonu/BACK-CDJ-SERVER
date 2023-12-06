@@ -24,7 +24,7 @@ class StudentService {
         //Creación de usuario de estudiante
         const dataUser: userData = {
             email: data.email,
-            password: `${data.document}${data.name}`, //dni+nombre
+            password: data.document, //dni
             type_document: data.type_document,
             document: data.document,
             status: 1,

@@ -22,11 +22,9 @@ module.exports = {
             document: {
                 type: DataTypes.STRING(15),
                 allowNull: false,
-                unique: true,
             },
             student_code: {
                 type: DataTypes.STRING(14),
-                unique: true,
             },
             name: {
                 type: DataTypes.STRING(50),

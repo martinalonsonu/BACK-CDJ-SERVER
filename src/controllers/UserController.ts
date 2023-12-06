@@ -3,29 +3,9 @@ import { loginRequest, userGetRequest, userCreateRequest, userEditRequest, updat
 import { handleServiceError, handleSuccessful } from "../helpers/handlerController";
 import UserService from "../services/userService";
 
-const { login, changePassword, getAllUsers, createOneUser, updateOneUser, deleteOneUser, getUserById, getTypeUsersList } = new UserService();
+const { getAllUsers, createOneUser, updateOneUser, deleteOneUser, getUserById, getTypeUsersList } = new UserService();
 
 class UserController {
-    loginUser = async (req: loginRequest, res: Response): Promise<void> => {
-        const { email, password } = req.body;
-        try {
-            const token: string = await login(email, password);
-            res.status(200).json({ token })
-        } catch (error) {
-            handleServiceError(error, res)
-        }
-    };
-
-    changePassword = async (req: updatePasswordRequest, res: Response): Promise<void> => {
-        const { email, password, newPassword } = req.body;
-        try {
-            const changeSuccess = await changePassword(email, password, newPassword)
-            changeSuccess && handleSuccessful(202, res, "Password updated successfully")
-        } catch (error) {
-            handleServiceError(error, res)
-        }
-    };
-
     getUsers = async (req: userGetRequest, res: Response): Promise<void> => {
         const { search } = req.body;
         try {
