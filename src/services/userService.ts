@@ -11,7 +11,7 @@ class UserService {
         if (!email || !password) throw new HandleError(400, "Parameters not provided");
         //Validación de existencia de usuario
         const userExists: User | null = await User.findOne({ where: { email: email } })
-        if (!userExists) throw new HandleError(404, "User not found")
+        if (!userExists) throw new HandleError(404, "User not found.")
 
         //Validación de password
         const passwordValidate: boolean = await bcrypt.compare(password, userExists.password)
@@ -82,7 +82,7 @@ class UserService {
             typeUser: userExists.typeUser.name
         }
         return response;
-    }
+    };
 
     getOneUser = async (id?: string, document?: string): Promise<any> => {
         const searchId = await User.findByPk(id, {
@@ -169,6 +169,23 @@ class UserService {
 
         await User.destroy({ where: { id: id } })
         return true;
+    };
+
+    getTypeUsersList = async (search?: string): Promise<any[]> => {
+        //condición de búsqueda: importamos filtros del modelo
+        const searchCondition = TypeUser.filters(search || '')
+
+        //búsqueda de registros
+        const typeUsers = await TypeUser.findAll({
+            paranoid: true,
+            where: searchCondition,
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'deletedAt']
+            }
+        })
+        console.log(typeUsers)
+        if (typeUsers.length === 0) throw new HandleError(404, "No existing user types")
+        return typeUsers;
     };
 }
 

@@ -1,9 +1,9 @@
 import { Response } from "express";
-import { loginRequest, userGetRequest, userCreateRequest, userEditRequest, updatePasswordRequest, deleteUserRequest, userData, userGetOneRequest } from "../types/request/user.request";
+import { loginRequest, userGetRequest, userCreateRequest, userEditRequest, updatePasswordRequest, deleteUserRequest, userData, userGetOneRequest, typeUserGetRequest } from "../types/request/user.request";
 import { handleServiceError, handleSuccessful } from "../helpers/handlerController";
 import UserService from "../services/userService";
 
-const { login, changePassword, getAllUsers, getOneUser, createOneUser, updateOneUser, deleteOneUser, getUserById } = new UserService();
+const { login, changePassword, getAllUsers, createOneUser, updateOneUser, deleteOneUser, getUserById, getTypeUsersList } = new UserService();
 
 class UserController {
     loginUser = async (req: loginRequest, res: Response): Promise<void> => {
@@ -36,7 +36,7 @@ class UserController {
         }
     };
 
-    getOneUser = async (req: userGetOneRequest, res: Response): Promise<void> => {
+    getOneUserById = async (req: userGetOneRequest, res: Response): Promise<void> => {
         const { id } = req.params;
         try {
             const user = await getUserById(id)
@@ -72,6 +72,17 @@ class UserController {
         try {
             const response = await deleteOneUser(id);
             response && handleSuccessful(200, res, "User deleted successfully")
+        } catch (error) {
+            handleServiceError(error, res)
+        }
+    };
+
+    getTypeUsers = async (req: typeUserGetRequest, res: Response) => {
+        const { search } = req.body;
+        try {
+            const typeUsers = await getTypeUsersList(search)
+            console.log('de acá?')
+            handleSuccessful(200, res, "All type users getting successfully", typeUsers)
         } catch (error) {
             handleServiceError(error, res)
         }

@@ -21,6 +21,12 @@ export interface userGetRequest extends Request {
     }
 }
 
+export interface typeUserGetRequest extends Request {
+    body: {
+        search?: string;
+    }
+}
+
 export interface userGetOneRequest extends Request {
     params: {
         id: string;
