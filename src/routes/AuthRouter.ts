@@ -1,5 +1,6 @@
 import { Router } from "express";
 import AuthController from "../controllers/AuthController";
+import validateToken from "../helpers/validate-token";
 
 class AuthRouter {
     public authRouter: Router
@@ -13,7 +14,8 @@ class AuthRouter {
 
     routes() {
         this.authRouter.use('/login', this.authController.loginUser);
-        this.authRouter.put('/changePassword', this.authController.changePassword);
+        this.authRouter.put('/changePassword', validateToken, this.authController.changePassword);
+        this.authRouter.post('/me', validateToken, this.authController.me);
     }
 }
 

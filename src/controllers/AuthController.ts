@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { loginRequest, updatePasswordRequest } from "../types/request/user.request";
 import { handleServiceError, handleSuccessful } from "../helpers/handlerController";
 import AuthService from "../services/authService";
@@ -10,6 +10,15 @@ class AuthController {
         try {
             const token: string = await login(email, password, typeUserId);
             res.status(200).json({ token })
+        } catch (error) {
+            handleServiceError(error, res)
+        }
+    };
+
+    me = async (req: Request, res: Response) => {
+        const user = req.user;
+        try {
+            res.status(200).json(user)
         } catch (error) {
             handleServiceError(error, res)
         }
