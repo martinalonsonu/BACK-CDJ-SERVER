@@ -4,40 +4,14 @@ import Parent from "../models/parent.model";
 import { parentData } from "../types/request/parent.request";
 
 class ParentService {
-    getParents = async (search?: string) => {
+    getParents = async (search?: string): Promise<Parent[]> => {
         //condición de búsqueda
-        let whereCondition = {};
-        if (search) {
-            whereCondition = {
-                [Op.or]: [
-                    {
-                        name: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el email
-                        },
-                    },
-                    {
-                        patern_surname: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el email
-                        },
-                    },
-                    {
-                        matern_surname: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el email
-                        },
-                    },
-                    {
-                        document: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el documento
-                        },
-                    },
-                ],
-            };
-        };
+        const searchCondition = Parent.filters(search || "")
 
         //búsqueda de registros
         const parents = await Parent.findAll({
             paranoid: true,
-            where: whereCondition,
+            where: searchCondition,
             attributes: {
                 exclude: ['createdAt', 'updatedAt', 'deletedAt']
             }
@@ -46,7 +20,7 @@ class ParentService {
         return parents;
     };
 
-    getOneParent = async (id: string) => {
+    getOneParent = async (id: string): Promise<Parent> => {
         //búsqueda de registro
         const parent = await Parent.findByPk(id, {
             paranoid: true,
@@ -58,7 +32,7 @@ class ParentService {
         return parent
     };
 
-    createParent = async (data: parentData) => {
+    createParent = async (data: parentData): Promise<Parent> => {
         //Validación de existencia de pariente
         const parentExists: Parent | null = await Parent.findOne({ where: { document: data.document } })
         if (parentExists) throw new HandleError(400, "User already exists")
@@ -72,7 +46,7 @@ class ParentService {
         return createParent;
     };
 
-    updateParent = async (id: string, data: parentData) => {
+    updateParent = async (id: string, data: parentData): Promise<Parent> => {
         const parentExists: Parent | null = await Parent.findByPk(id)
         if (!parentExists) throw new HandleError(404, "Parent does not exist")
 
@@ -85,7 +59,7 @@ class ParentService {
         return updateParent;
     };
 
-    deleteParent = async (id: string) => {
+    deleteParent = async (id: string): Promise<boolean> => {
         const parentExists: Parent | null = await Parent.findByPk(id)
         if (!parentExists) throw new HandleError(404, "Parent does not exist")
 

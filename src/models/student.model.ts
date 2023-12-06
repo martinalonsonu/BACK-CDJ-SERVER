@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Op, col, fn, where } from "sequelize";
 import sequelize from "../db/connection";
 
 class Student extends Model<StudentInterface> {
@@ -19,6 +19,17 @@ class Student extends Model<StudentInterface> {
     public address!: string;
     public native_language!: string;
     public discapacity!: boolean;
+
+    static filters(search: string) {
+        return {
+            [Op.or]: [
+                where(fn('LOWER', col('name')), 'LIKE', `%${search.toLowerCase()}%`),
+                where(fn('LOWER', col('patern_surname')), 'LIKE', `%${search.toLowerCase()}%`),
+                where(fn('LOWER', col('matern_surname')), 'LIKE', `%${search.toLowerCase()}%`),
+                where(fn('LOWER', col('document')), 'LIKE', `%${search.toLowerCase()}%`),
+            ],
+        }
+    }
 }
 
 Student.init(

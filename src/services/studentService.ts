@@ -10,7 +10,7 @@ import UserService from "./userService";
 const { createOneUser, getOneUser } = new UserService()
 
 class StudentService {
-    createNewStudent = async (data: studentData) => {
+    createNewStudent = async (data: studentData): Promise<createStudentResponse> => {
         //Validación de existencia del estudiante
         const studentExists: Student | null = await Student.findOne({ where: { document: data.document } })
         const userExists: User | null = await User.findOne({ where: { document: data.document, email: data.email } })
@@ -48,38 +48,12 @@ class StudentService {
 
     getStudents = async (search?: string) => {
         //condición de búsqueda
-        let whereCondition = {};
-        if (search) {
-            whereCondition = {
-                [Op.or]: [
-                    {
-                        name: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el email
-                        },
-                    },
-                    {
-                        patern_surname: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el email
-                        },
-                    },
-                    {
-                        matern_surname: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el email
-                        },
-                    },
-                    {
-                        document: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el documento
-                        },
-                    },
-                ],
-            };
-        };
+        const searchCondition = Student.filters(search || "");
 
         //búsqueda de registros
         const students = await Promise.all((await Student.findAll({
             paranoid: true,
-            where: whereCondition,
+            where: searchCondition,
             attributes: {
                 exclude: ['createdAt', 'updatedAt', 'deletedAt']
             }

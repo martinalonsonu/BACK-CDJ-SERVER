@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Op, col, fn, where } from "sequelize";
 import sequelize from "../db/connection";
 
 class StudentParentDetail extends Model<StudentParentInterface> {
@@ -7,6 +7,14 @@ class StudentParentDetail extends Model<StudentParentInterface> {
     public idParent!: number;
     public relationship!: string;
     public tutor!: boolean;
+
+    static filters(search: string) {
+        return {
+            [Op.or]: [
+                where(fn('LOWER', col('id')), 'LIKE', `%${search.toLowerCase()}%`),
+            ],
+        }
+    }
 }
 
 StudentParentDetail.init(

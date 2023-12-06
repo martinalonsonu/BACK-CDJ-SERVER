@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import { userData } from "../types/request/user.request";
 import TypeUser from "../models/typeUser.model";
-import { Op } from "sequelize";
 import { HandleError } from "../helpers/handlerController";
 import { getRoleByUser } from "../helpers/getRoleByUser";
 
@@ -47,30 +46,14 @@ class UserService {
     };
 
     getAllUsers = async (search?: string): Promise<any[]> => {
-        //condición de búsqueda
-        let whereCondition = {};
-        if (search) {
-            whereCondition = {
-                [Op.or]: [
-                    {
-                        email: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el email
-                        },
-                    },
-                    {
-                        document: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el documento
-                        },
-                    },
-                ],
-            };
-        }
+        //condición de búsqueda: importamos filtros del modelo
+        const searchCondition = User.filters(search || '')
 
         //búsqueda de registros
         const users = (await User.findAll({
             attributes: ['id', 'document', 'email', 'typeUser_id'],
             include: [{ model: TypeUser, as: 'typeUser', attributes: ['name'] }],
-            where: whereCondition,
+            where: searchCondition,
             paranoid: true
         })).map((user: any) => ({
             id: user.id,

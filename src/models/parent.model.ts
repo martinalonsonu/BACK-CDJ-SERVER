@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Op, col, fn, where } from "sequelize";
 import sequelize from "../db/connection";
 
 class Parent extends Model<ParentInterface> {
@@ -17,6 +17,17 @@ class Parent extends Model<ParentInterface> {
     public liveWithStudent!: boolean;
     public religion!: string;
     public cel_phone!: string;
+
+    static filters(search: string) {
+        return {
+            [Op.or]: [
+                where(fn('LOWER', col('name')), 'LIKE', `%${search.toLowerCase()}%`),
+                where(fn('LOWER', col('patern_surname')), 'LIKE', `%${search.toLowerCase()}%`),
+                where(fn('LOWER', col('matern_surname')), 'LIKE', `%${search.toLowerCase()}%`),
+                where(fn('LOWER', col('document')), 'LIKE', `%${search.toLowerCase()}%`),
+            ],
+        }
+    }
 }
 
 Parent.init(

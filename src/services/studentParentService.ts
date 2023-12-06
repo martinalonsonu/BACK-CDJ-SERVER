@@ -11,22 +11,11 @@ const { getOneParent } = new ParentService()
 class StudentParentService {
     getStudentParent = async (search?: string) => {
         //condición de búsqueda
-        let whereCondition = {};
-        if (search) {
-            whereCondition = {
-                [Op.or]: [
-                    {
-                        id: {
-                            [Op.like]: `%${search}%`, // Buscar coincidencias parciales en el id
-                        },
-                    }
-                ],
-            };
-        };
+        const seachCondition = StudentParentDetail.filters(search || "")
 
         const studenParent = await Promise.all((await StudentParentDetail.findAll({
             paranoid: true,
-            where: whereCondition,
+            where: seachCondition,
             attributes: {
                 exclude: ['createdAt', 'updatedAt', 'deletedAt']
             }
@@ -103,7 +92,7 @@ class StudentParentService {
         }
     };
 
-    deleteStudentParent = async (id: string) => {
+    deleteStudentParent = async (id: string): Promise<boolean> => {
         const studentParentExists: StudentParentDetail | null = await StudentParentDetail.findByPk(id)
         if (!studentParentExists) throw new HandleError(404, "Parent does not exist")
 

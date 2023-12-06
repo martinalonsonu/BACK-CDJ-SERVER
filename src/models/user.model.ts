@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Op, col, fn, where } from "sequelize";
 import sequelize from "../db/connection";
 import TypeUser from "./typeUser.model";
 
@@ -9,6 +9,15 @@ class User extends Model<UserInterface> {
     public password!: string;
     public status!: number;
     public typeUser_id!: number;
+
+    static filters(search: string) {
+        return {
+            [Op.or]: [
+                where(fn('LOWER', col('email')), 'LIKE', `%${search.toLowerCase()}%`),
+                where(fn('LOWER', col('document')), 'LIKE', `%${search.toLowerCase()}%`),
+            ],
+        }
+    }
 }
 
 User.init(
