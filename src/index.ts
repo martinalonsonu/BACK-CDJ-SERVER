@@ -10,10 +10,12 @@ dotenv.config();
 class Server {
     private app: Application;
     private port: number | string;
+    private routeClient: string | undefined;
 
     constructor() {
         this.app = express()
         this.port = process.env.PORT || 8000;
+        this.routeClient = process.env.ROUTE_CLIENT || undefined
 
         this.config();
         this.routes();
@@ -22,7 +24,10 @@ class Server {
 
     private config = (): void => {
         this.app.use(morgan('dev'));
-        this.app.use(cors());
+        this.app.use(cors({
+            origin: this.routeClient,
+            credentials: true
+        }));
         this.app.use(json());
     }
 
