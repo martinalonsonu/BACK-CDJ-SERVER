@@ -18,7 +18,7 @@ class AuthController {
     me = async (req: Request, res: Response) => {
         const user = req.user;
         try {
-            res.status(200).json(user)
+            handleSuccessful(202, res, "User getting successfully", user)
         } catch (error) {
             handleServiceError(error, res)
         }

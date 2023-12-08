@@ -61,7 +61,6 @@ class UserController {
         const { search } = req.body;
         try {
             const typeUsers = await getTypeUsersList(search)
-            console.log('de acá?')
             handleSuccessful(200, res, "All type users getting successfully", typeUsers)
         } catch (error) {
             handleServiceError(error, res)
