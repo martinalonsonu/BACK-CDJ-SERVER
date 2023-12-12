@@ -7,10 +7,11 @@ import jwt from 'jsonwebtoken';
 
 class AuthService {
     login = async (email: string, password: string, typeUserId: number): Promise<string> => {
-        if (!email || !password) throw new HandleError(400, "Parameters not provided");
+        if (!email || !password || !typeUserId) throw new HandleError(400, "Parameters not provided");
         //Validación de existencia de usuario
-        const userExists: User | null = await User.findOne({ where: { email: email } })
+        const userExists: any = await User.findOne({ where: { email: email }, include: [{ model: TypeUser, as: 'typeUser', attributes: ['name'] }], })
         if (!userExists) throw new HandleError(404, "User not found.")
+        if (userExists.typeUser_id !== typeUserId) throw new HandleError(404, "User not found.")
         let data: any;
         switch (typeUserId) {
             case 1:
@@ -33,24 +34,25 @@ class AuthService {
 
         //Generamos token
         const token = jwt.sign({
-            id: data.id,
-            type_document: data.type_document,
-            document: data.document,
-            student_code: data.student_code,
-            name: data.name,
-            patern_surname: data.patern_surname,
-            matern_surname: data.matern_surname,
-            sex: data.sex,
-            civil_status: data.civil_status,
-            date_birth: data.date_birth,
-            country: data.country,
-            region: data.region,
-            province: data.province,
-            district: data.district,
-            address: data.address,
-            native_language: data.native_language,
-            discapacity: data.discapacity,
-            religion: data.religion,
+            id: data ? data.id : null,
+            type_document: data ? data.type_document : null,
+            document: data ? data.document : null,
+            student_code: data ? data.student_code : null,
+            name: data ? data.name : null,
+            patern_surname: data ? data.patern_surname : null,
+            matern_surname: data ? data.matern_surname : null,
+            sex: data ? data.sex : null,
+            civil_status: data ? data.civil_status : null,
+            date_birth: data ? data.date_birth : null,
+            country: data ? data.country : null,
+            region: data ? data.region : null,
+            province: data ? data.province : null,
+            district: data ? data.district : null,
+            address: data ? data.address : null,
+            native_language: data ? data.native_language : null,
+            discapacity: data ? data.discapacity : null,
+            religion: data ? data.religion : null,
+            role: userExists?.typeUser?.name,
             dataUser: {
                 id: userExists.id,
                 document: userExists.document,

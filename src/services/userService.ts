@@ -144,7 +144,6 @@ class UserService {
                 exclude: ['createdAt', 'updatedAt', 'deletedAt']
             }
         })
-        console.log(typeUsers)
         if (typeUsers.length === 0) throw new HandleError(404, "No existing user types")
         return typeUsers;
     };
